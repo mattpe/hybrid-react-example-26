@@ -1,15 +1,11 @@
-import './App.css';
-
-const Greeting = ({person}) => {
-  return <h1>Hello, {person}!</h1>;
-};
+//import './App.css';
+import Home from './components/Home';
 
 const App = () => {
   return (
     <>
-      <h1>My empty app</h1>
-      <Greeting person="Matti" />
-      <Greeting person="Ile" />
+      <h1>My Media sharing app</h1>
+      <Home />
     </>
   );
 };
