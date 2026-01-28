@@ -1,10 +1,10 @@
-import type {MediaItem} from 'hybrid-types/DBTypes';
+import type {MediaItemWithOwner} from 'hybrid-types/DBTypes';
 import {Link} from 'react-router';
 //import {useState} from 'react';
 
 const MediaRow = (props: {
-  item: MediaItem;
-  setSelectedItem: (item: MediaItem | undefined) => void;
+  item: MediaItemWithOwner;
+  setSelectedItem: (item: MediaItemWithOwner | undefined) => void;
 }) => {
   const {item} = props;
   //const [dummyLikes, setDummyLikes] = useState(0);
@@ -20,6 +20,7 @@ const MediaRow = (props: {
       </td>
       <td>{item.title}</td>
       <td>{item.description}</td>
+      <td>{item.username}</td>
       <td>{new Date(item.created_at).toLocaleString('fi-FI')}</td>
       <td>{item.filesize}</td>
       <td>{item.media_type}</td>
