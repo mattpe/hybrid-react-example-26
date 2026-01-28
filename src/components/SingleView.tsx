@@ -6,7 +6,6 @@ const SingleView = (props: {
 }) => {
   const {item, setSelectedItem} = props;
   return (
-
     <dialog open>
       {item && (
         <>
@@ -15,11 +14,11 @@ const SingleView = (props: {
             <img src={item.filename} alt={item.description || item.title} />
           )}
           {item.media_type.split('/')[0] === 'video' && (
-            <video src={item.filename} controls/>
+            <video src={item.filename} controls />
           )}
           <p>{item.description}</p>
           <p>
-            Uploaded at {new Date(item.created_at).toLocaleString('en-fi')} by
+            Uploaded at {new Date(item.created_at).toLocaleString('fi-FI')} by
             user id {item.user_id}
           </p>
           <button

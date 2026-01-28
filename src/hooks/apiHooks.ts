@@ -17,20 +17,33 @@ const useMedia = () => {
 
       const mediaWithOwners = await Promise.all<MediaItemWithOwner>(
         media.map(async (item) => {
-          const owner = await fetchData<UserWithNoPassword>(
-            `${import.meta.env.VITE_AUTH_API}/users/${item.user_id}`,
-          );
-          const mediaItemWithOwner: MediaItemWithOwner = {
-            ...item,
-            username: owner.username,
-          };
-          return mediaItemWithOwner;
+          try {
+            const owner = await fetchData<UserWithNoPassword>(
+              `${import.meta.env.VITE_AUTH_API}/user/${item.user_id}`,
+            );
+            const mediaItemWithOwner: MediaItemWithOwner = {
+              ...item,
+              username: owner.username,
+            };
+            return mediaItemWithOwner;
+          } catch (error) {
+            console.error(error);
+            return {
+              ...item,
+              username: 'not found',
+            };
+          }
         }),
       );
       setMediaArray(mediaWithOwners);
       console.log(mediaWithOwners);
     };
-    getMedia();
+
+    try {
+      getMedia();
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
   return {mediaArray};
 };
