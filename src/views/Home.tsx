@@ -1,20 +1,39 @@
-import type {MediaItem} from 'hybrid-types/DBTypes';
+import type {
+  MediaItem,
+  MediaItemWithOwner,
+  UserWithNoPassword,
+} from 'hybrid-types/DBTypes';
 import {useEffect, useState} from 'react';
 import MediaRow from '../components/MediaRow';
 import SingleView from '../components/SingleView';
 import {fetchData} from '../utils/fetch-data';
 
 const Home = () => {
-  const [mediaArray, setMediaArray] = useState<MediaItem[]>([]);
+  const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
   const [selectedItem, setSelectedItem] = useState<MediaItem | undefined>(
     undefined,
   );
 
   useEffect(() => {
     const getMedia = async () => {
-      const json = await fetchData<MediaItem[]>('test.json');
-      setMediaArray(json);
-      console.log(json);
+      const media = await fetchData<MediaItem[]>(
+        import.meta.env.VITE_MEDIA_API + '/media',
+      );
+
+      const mediaWithOwners = await Promise.all<MediaItemWithOwner>(
+        media.map(async (item) => {
+          const owner = await fetchData<UserWithNoPassword>(
+            `${import.meta.env.VITE_AUTH_API}/users/${item.user_id}`,
+          );
+          const mediaItemWithOwner: MediaItemWithOwner = {
+            ...item,
+            username: owner.username,
+          };
+          return mediaItemWithOwner;
+        }),
+      );
+      setMediaArray(mediaWithOwners);
+      console.log(mediaWithOwners);
     };
     getMedia();
   }, []);
