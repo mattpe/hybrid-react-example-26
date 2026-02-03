@@ -11,11 +11,13 @@ const LoginForm = () => {
     username: '',
     password: '',
   };
+
   const doLogin = async () => {
     //console.log(inputs);
     // login functionalities here
+    // eslint-disable-next-line react-hooks/immutability
     const result: LoginResponse = await postLogin(inputs as Credentials);
-    console.log('doLogin result', result)
+    console.log('doLogin result', result);
     localStorage.setItem('token', result.token);
     navigate('/');
   };
