@@ -3,7 +3,7 @@ import useForm from '../hooks/formHooks';
 import type {RegisterCredentials} from '../types/LocalTypes';
 
 const RegisterForm = () => {
-  const {postRegister} =  useUser();
+  const {postRegister} = useUser();
 
   const initValues: RegisterCredentials = {
     username: '',
@@ -11,6 +11,7 @@ const RegisterForm = () => {
     email: '',
   };
   const doRegister = async () => {
+    // eslint-disable-next-line react-hooks/immutability
     const result = await postRegister(inputs as RegisterCredentials);
     console.log('post registration result', result);
   };
