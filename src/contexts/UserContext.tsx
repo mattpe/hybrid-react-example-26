@@ -39,10 +39,13 @@ const UserProvider = ({children}: {children: React.ReactNode}) => {
   // handleAutoLogin is used when the app is loaded to check if there is a valid token in local storage
   const handleAutoLogin = async () => {
     try {
-      // TODO: get token from local storage
-      // TODO: if token exists, get user data from API
-      // TODO: set user to state
-      // TODO: navigate to home
+      const token = localStorage.getItem('token');
+      console.log(token);
+      if (token) {
+        const user = await getUserByToken(token);
+        setUser(user);
+        navigate('/');
+      }
     } catch (e) {
       console.log((e as Error).message);
     }
