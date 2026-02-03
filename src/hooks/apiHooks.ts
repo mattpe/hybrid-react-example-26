@@ -5,6 +5,8 @@ import type {
 } from 'hybrid-types/DBTypes';
 import {useEffect, useState} from 'react';
 import {fetchData} from '../utils/fetch-data';
+import type {Credentials, RegisterCredentials} from '../types/LocalTypes';
+import type {LoginResponse, UserResponse} from 'hybrid-types/MessageTypes';
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState<MediaItemWithOwner[]>([]);
@@ -47,4 +49,51 @@ const useMedia = () => {
   return {mediaArray};
 };
 
-export {useMedia};
+const useAuthentication = () => {
+  const postLogin = async (inputs: Credentials) => {
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(inputs),
+    };
+    const loginResult = await fetchData<LoginResponse>(
+      import.meta.env.VITE_AUTH_API + '/auth/login',
+      fetchOptions,
+    );
+    return loginResult;
+  };
+
+  return {postLogin};
+};
+
+const useUser = () => {
+  const resourceUrl = import.meta.env.VITE_AUTH_API + '/users';
+
+  const postRegister = async (inputs: RegisterCredentials) => {
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(inputs),
+    };
+    const registerResult = await fetchData(resourceUrl, fetchOptions);
+    return registerResult;
+  };
+
+  const getUserByToken = async (token: string) => {
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    };
+    return fetchData<UserResponse>(resourceUrl + '/token', options);
+  };
+
+  return {postRegister, getUserByToken};
+};
+
+export {useMedia, useAuthentication, useUser};
