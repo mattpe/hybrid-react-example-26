@@ -1,18 +1,34 @@
 import {useState} from 'react';
 import useForm from '../hooks/formHooks';
+import {useFile, useMedia} from '../hooks/apiHooks';
 
 const Upload = () => {
   const [uploading, setUploading] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
+  const {postFile} = useFile();
+  const {postMedia} = useMedia();
 
   const initValues = {title: '', description: ''};
-  const doUpload = () => {
+
+  const doUpload = async () => {
+    const token = localStorage.getItem('token');
+    if (!file || !token) {
+      console.log('doUpload file or token falsy');
+      return;
+    }
     setUploading(true);
-    // TODO: replace following with real upload functionality
-    setTimeout(() => {
+    try {
+      const uploadResponse = await postFile(file, token);
+      console.log('file upload response', uploadResponse);
+      const mediaResponse = await postMedia(uploadResponse, inputs, token);
+      console.log('postMedia response', mediaResponse);
+    } catch (error) {
+      console.log((error as Error).message);
+    } finally {
       setUploading(false);
-    }, 3000);
+    }
   };
+
   const {handleInputChange, handleSubmit, inputs} = useForm(
     doUpload,
     initValues,
