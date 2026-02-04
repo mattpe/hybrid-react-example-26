@@ -1,9 +1,9 @@
 // UserContext.tsx
 import React, {createContext, useState} from 'react';
-import {UserWithNoPassword} from '@sharedTypes/DBTypes';
+import type {UserWithNoPassword} from 'hybrid-types/DBTypes';
 import {useAuthentication, useUser} from '../hooks/apiHooks';
 import {useNavigate} from 'react-router';
-import {AuthContextType, Credentials} from '../types/LocalTypes';
+import type {AuthContextType, Credentials} from '../types/LocalTypes';
 import type {LoginResponse} from 'hybrid-types/MessageTypes';
 
 const UserContext = createContext<AuthContextType | null>(null);
@@ -42,8 +42,8 @@ const UserProvider = ({children}: {children: React.ReactNode}) => {
       const token = localStorage.getItem('token');
       console.log(token);
       if (token) {
-        const user = await getUserByToken(token);
-        setUser(user);
+        const response = await getUserByToken(token);
+        setUser(response.user);
         navigate('/');
       }
     } catch (e) {
