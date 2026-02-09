@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useUser} from '../hooks/apiHooks';
 import useForm from '../hooks/formHooks';
 import type {RegisterCredentials} from '../types/LocalTypes';
@@ -18,6 +18,7 @@ const RegisterForm = () => {
     try {
       // eslint-disable-next-line react-hooks/immutability
       const userResponse = await getUsernameAvailable(inputs.username);
+      // check also useEffects below!
       setUsernameAvailable(userResponse.available);
       const emailResponse = await getEmailAvailable(inputs.email);
       setEmailAvailable(emailResponse.available);
@@ -35,6 +36,35 @@ const RegisterForm = () => {
     doRegister,
     initValues,
   );
+
+  // option: check username & email availibilities based on state updates using useEffects
+  useEffect(() => {
+    const checkUsername = async () => {
+      if (inputs.username.length > 2) {
+        try {
+          const userResponse = await getUsernameAvailable(inputs.username);
+          setUsernameAvailable(userResponse.available);
+        } catch (error) {
+          console.log((error as Error).message);
+        }
+      }
+    };
+    checkUsername();
+  }, [inputs.username, getUsernameAvailable]);
+
+  useEffect(() => {
+    const checkEmail = async () => {
+      if (inputs.email.length > 4) {
+        try {
+          const response = await getEmailAvailable(inputs.email);
+          setEmailAvailable(response.available);
+        } catch (error) {
+          console.log((error as Error).message);
+        }
+      }
+    };
+    checkEmail();
+  }, [inputs.email, getEmailAvailable]);
 
   return (
     <>
