@@ -1,9 +1,12 @@
+import {useState} from 'react';
 import {useUser} from '../hooks/apiHooks';
 import useForm from '../hooks/formHooks';
 import type {RegisterCredentials} from '../types/LocalTypes';
 
 const RegisterForm = () => {
-  const {postRegister} = useUser();
+  const {postRegister, getUsernameAvailable, getEmailAvailable} = useUser();
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean>(true);
+  const [emailAvailable, setEmailAvailable] = useState<boolean>(true);
 
   const initValues: RegisterCredentials = {
     username: '',
@@ -11,9 +14,15 @@ const RegisterForm = () => {
     email: '',
   };
   const doRegister = async () => {
-    // eslint-disable-next-line react-hooks/immutability
-    const result = await postRegister(inputs as RegisterCredentials);
-    console.log('post registration result', result);
+    try {
+      // eslint-disable-next-line react-hooks/immutability
+      const userAvailableResponse = await getUsernameAvailable(inputs.username);
+      setUsernameAvailable(userAvailableResponse.available);
+      const result = await postRegister(inputs as RegisterCredentials);
+      console.log('post registration result', result);
+    } catch (error) {
+      console.log((error as Error).message);
+    }
   };
 
   const {inputs, handleInputChange, handleSubmit} = useForm(

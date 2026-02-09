@@ -7,6 +7,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {fetchData} from '../utils/fetch-data';
 import type {Credentials, RegisterCredentials} from '../types/LocalTypes';
 import type {
+  AvailableResponse,
   LoginResponse,
   MediaResponse,
   UploadResponse,
@@ -128,7 +129,17 @@ const useUser = () => {
     [resourceUrl],
   );
 
-  return {postRegister, getUserByToken};
+  const getUsernameAvailable = async (username: string) => {
+    // fetch from endpoint /users/username/:username
+    return fetchData<AvailableResponse>(`${resourceUrl}/username/'${username}`);
+  };
+
+  const getEmailAvailable = async (email: string) => {
+    // fetch from endpoint /users/email/:email
+    return fetchData<AvailableResponse>(`${resourceUrl}/email/'${email}`);
+  };
+
+  return {postRegister, getUserByToken, getUsernameAvailable, getEmailAvailable};
 };
 
 const useFile = () => {
