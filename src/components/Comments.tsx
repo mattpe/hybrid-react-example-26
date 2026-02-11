@@ -1,27 +1,38 @@
-import {useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import {useUserContext} from '../hooks/ContextHooks';
 import useForm from '../hooks/formHooks';
 import {useCommentStore} from '../stores/commentStore';
+import {useComment} from '../hooks/apiHooks';
 
 const Comments = ({mediaId}: {mediaId: number}) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const {comments, addComment} = useCommentStore();
+  const {comments, setComments} = useCommentStore();
   const {user} = useUserContext();
+  const {postComment, getCommentsByMediaId} = useComment();
 
   const initValues = {comment_text: ''};
   const doComment = async () => {
-    if (!user) return;
+    const token = localStorage.getItem('token');
+    if (!user || !token) {
+      return;
+    }
     // eslint-disable-next-line react-hooks/immutability
     console.log('adding comment:', inputs.comment_text);
-    addComment({
-      user_id: user.user_id,
-      username: user.username,
-      comment_text: inputs.comment_text,
-      media_id: mediaId,
-    });
-    //console.log('comments in zustand store:', comments);
+    const commentResponse = await postComment(
+      inputs.comment_text,
+      mediaId,
+      token,
+    );
 
-    // reset useForm state values
+    if (!commentResponse) {
+      return;
+    }
+    const comments = await getCommentsByMediaId(mediaId);
+
+    if (comments.length > 0) {
+      setComments(comments);
+    }
+
     // eslint-disable-next-line react-hooks/immutability
     setInputs(initValues);
     // clear comment input with useRef() hook
@@ -35,6 +46,19 @@ const Comments = ({mediaId}: {mediaId: number}) => {
     initValues,
   );
 
+  useEffect(() => {
+    const main = async () => {
+      console.log('Moro!!!!!');
+      const comments = await getCommentsByMediaId(mediaId);
+
+      if (comments.length > 0) {
+        setComments(comments);
+      }
+    };
+
+    main();
+  }, [mediaId]);
+
   return (
     <>
       <h3>Comments</h3>
@@ -44,8 +68,7 @@ const Comments = ({mediaId}: {mediaId: number}) => {
           {comments.map((comment) => (
             <li key={comment.comment_id}>
               {comment.created_at?.toLocaleString('fi-FI')}{' '}
-              <b>{comment.username}:</b>{' '}
-              {comment.comment_text}
+              <b>{comment.username}:</b> {comment.comment_text}
             </li>
           ))}
         </ul>
