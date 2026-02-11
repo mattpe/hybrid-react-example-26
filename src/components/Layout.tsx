@@ -14,10 +14,10 @@ const Layout = () => {
 
   return (
     <div>
-      <header className="bg-stone-600">
+      <header className="bg-card text-card-foreground shadow-sm">
         <div className="mx-auto mb-4 flex w-full max-w-6xl items-center justify-between px-4 py-2 sm:px-6">
           <Link
-            className="block rounded px-2 py-2 text-center text-2xl font-bold transition-all duration-500 ease-in-out hover:bg-stone-700"
+            className="hover:bg-accent hover:text-accent-foreground block rounded px-2 py-2 text-center text-2xl font-bold transition-all duration-500 ease-in-out"
             to="/"
           >
             NSFW App
@@ -26,7 +26,7 @@ const Layout = () => {
             <ul className="m-0 flex items-center justify-end gap-1 p-0">
               <li>
                 <Link
-                  className="block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out hover:bg-stone-700"
+                  className="hover:bg-accent hover:text-accent-foreground block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out"
                   to="/"
                 >
                   Home
@@ -36,7 +36,7 @@ const Layout = () => {
                 <>
                   <li>
                     <Link
-                      className="block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out hover:bg-stone-700"
+                      className="hover:bg-accent hover:text-accent-foreground block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out"
                       to="/profile"
                     >
                       Profile
@@ -44,7 +44,7 @@ const Layout = () => {
                   </li>
                   <li>
                     <Link
-                      className="block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out hover:bg-stone-700"
+                      className="hover:bg-accent hover:text-accent-foreground block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out"
                       to="/upload"
                     >
                       Upload
@@ -52,7 +52,7 @@ const Layout = () => {
                   </li>
                   <li>
                     <Link
-                      className="block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out hover:bg-stone-700"
+                      className="hover:bg-accent hover:text-accent-foreground block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out"
                       to="/logout"
                     >
                       Logout
@@ -62,7 +62,7 @@ const Layout = () => {
               ) : (
                 <li>
                   <Link
-                    className="block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out hover:bg-stone-700"
+                    className="hover:bg-accent hover:text-accent-foreground block rounded px-3 py-2 text-center font-bold transition-all duration-500 ease-in-out"
                     to="/login"
                   >
                     Login
@@ -73,6 +73,7 @@ const Layout = () => {
           </nav>
         </div>
       </header>
+
       <main>
         <Outlet />
       </main>

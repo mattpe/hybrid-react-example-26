@@ -1,6 +1,7 @@
 // TEMP Greeting & dummylogin example
 
 import {useState} from 'react';
+import {Button} from './ui/button';
 
 const UserGreeting = () => {
   return <p>Terve kirjautunut käyttäjä!</p>;
@@ -16,23 +17,23 @@ const Greeting = () => {
     <>
       {isLoggedIn ? <UserGreeting /> : <GuestGreeting />}
       {!isLoggedIn && (
-        <button
+        <Button
           onClick={() => {
             setIsLoggedIn(true);
           }}
         >
           Login
-        </button>
+        </Button>
       )}
       {/* toinen tapa, toggle-nappula (huom. jsx:n sisällä oleva kommentti)*/}
-      <button
+      <Button
         onClick={() => {
           // kommentit toimii normaalisti koodin sisällä
           setIsLoggedIn(!isLoggedIn);
         }}
       >
         {isLoggedIn ? 'Log out' : 'Login'}
-      </button>
+      </Button>
     </>
   );
 };
